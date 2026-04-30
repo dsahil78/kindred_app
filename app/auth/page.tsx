@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -10,6 +10,14 @@ import { useAuth } from "@/lib/auth-context"
 import type { UserRole } from "@/lib/types"
 
 export default function AuthPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
+      <AuthPageInner />
+    </Suspense>
+  )
+}
+
+function AuthPageInner() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const intent = searchParams.get("intent")
