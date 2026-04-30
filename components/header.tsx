@@ -19,7 +19,7 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full px-6 backdrop-blur transition-colors duration-300 lg:px-8",
+        "sticky top-0 z-50 w-full px-12 sm:px-16 backdrop-blur transition-colors duration-300 lg:px-20",
         scrolled
           ? "border-b border-border/60 bg-background/85 supports-[backdrop-filter]:bg-background/70"
           : "border-b border-transparent bg-background"
@@ -27,7 +27,7 @@ export function Header() {
     >
       <div
         className={cn(
-          "mx-auto flex max-w-7xl items-center justify-between transition-all duration-300",
+          "mx-auto flex max-w-6xl items-center justify-between transition-all duration-300",
           scrolled ? "h-14" : "h-20"
         )}
       >

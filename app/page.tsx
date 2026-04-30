@@ -22,47 +22,45 @@ export default function HomePage() {
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="px-6 pb-24 pt-16 lg:px-8 lg:pt-28">
-          <div className="mx-auto max-w-7xl">
-            <div className="flex flex-col items-center gap-16 lg:flex-row lg:items-center lg:justify-between">
+        <section className="px-12 pb-24 pt-16 sm:px-16 lg:px-20 lg:pb-32 lg:pt-28">
+          <div className="mx-auto max-w-6xl">
+            <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-x-8">
               {/* Left content */}
-              <div className="max-w-xl lg:max-w-lg">
-                <p className="text-sm font-medium uppercase tracking-[0.2em] text-secondary">
-                  {/* For Patients */}
+              <div className="w-full max-w-xl lg:col-span-6 xl:col-span-7">
+                <p className="text-xs font-medium uppercase tracking-[0.22em] text-secondary">
+                  For Patients
                 </p>
-                
-                <h1 className="mt-8 font-serif text-[2.75rem] font-normal leading-[1.15] tracking-tight sm:text-5xl lg:text-[3.25rem]">
-                  <span className="text-foreground">The right therapist</span>
-                  <br />
-                  <span className="italic text-primary">changes everything.</span>
+
+                <h1 className="mt-6 font-serif text-[2.5rem] font-normal leading-[1.05] tracking-tight sm:text-[3rem] lg:text-[3.25rem]">
+                  <span className="block whitespace-nowrap text-foreground">The right therapist</span>
+                  <span className="block whitespace-nowrap italic text-primary">changes everything.</span>
                 </h1>
-                
-                <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
+
+                <p className="mt-7 max-w-lg text-lg leading-relaxed text-muted-foreground">
                   Finding them shouldn&apos;t require scrolling through hundreds
                   of identical listings and hoping for the best. Kindred uses AI
                   to match you based on what actually matters — personality,
                   approach, and genuine human fit.
                 </p>
-                
-                <div className="mt-10">
+
+                <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4">
                   <Button asChild size="lg" className="h-14 rounded-full px-8 text-base font-medium">
                     <Link href="/auth?mode=signup&role=client">
                       Get Started
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
+                  <p className="text-sm text-muted-foreground">
+                    Free for patients, always.{" "}
+                    <Link href="/therapists" className="text-foreground underline underline-offset-4 transition-colors hover:text-primary">
+                      Are you a therapist?
+                    </Link>
+                  </p>
                 </div>
-                
-                <p className="mt-6 text-sm text-muted-foreground">
-                  Free for patients, always.{" "}
-                  <Link href="/therapists" className="text-foreground underline underline-offset-4 transition-colors hover:text-primary">
-                    Are you a therapist?
-                  </Link>
-                </p>
               </div>
-              
+
               {/* Right illustration */}
-              <div className="flex w-full flex-1 justify-center lg:justify-end">
+              <div className="flex w-full justify-center lg:col-span-6 lg:justify-end xl:col-span-5">
                 <MatchingDiagram />
               </div>
             </div>
@@ -70,8 +68,8 @@ export default function HomePage() {
         </section>
 
         {/* Problem Section */}
-        <section className="border-t border-border bg-card px-6 py-24 lg:px-8 lg:py-32">
-          <div className="mx-auto max-w-7xl">
+        <section className="border-t border-border bg-card px-12 sm:px-16 py-24 lg:px-20 lg:py-32">
+          <div className="mx-auto max-w-6xl">
             <div className="max-w-2xl">
               <p className="text-sm font-medium uppercase tracking-[0.2em] text-secondary">
                 The Problem
@@ -113,8 +111,8 @@ export default function HomePage() {
         </section>
 
         {/* How It Works Section */}
-        <section id="how-it-works" className="px-6 py-24 lg:px-8 lg:py-32">
-          <div className="mx-auto max-w-7xl">
+        <section id="how-it-works" className="px-12 sm:px-16 py-24 lg:px-20 lg:py-32">
+          <div className="mx-auto max-w-6xl">
             <div className="max-w-2xl">
               <p className="text-sm font-medium uppercase tracking-[0.2em] text-secondary">
                 How It Works
@@ -171,8 +169,8 @@ export default function HomePage() {
         </section>
 
         {/* Kindred Fit Engine Section */}
-        <section id="fit-engine" className="border-t border-border bg-card px-6 py-24 lg:px-8 lg:py-32">
-          <div className="mx-auto max-w-7xl">
+        <section id="fit-engine" className="border-t border-border bg-card px-12 sm:px-16 py-24 lg:px-20 lg:py-32">
+          <div className="mx-auto max-w-6xl">
             {/* Eyebrow + heading */}
             <div className="mx-auto max-w-3xl text-center">
               <div className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-1.5 shadow-sm">
@@ -316,7 +314,7 @@ export default function HomePage() {
         </section>
 
         {/* Testimonial Section */}
-        <section className="px-6 py-24 lg:px-8 lg:py-32">
+        <section className="px-12 sm:px-16 py-24 lg:px-20 lg:py-32">
           <div className="mx-auto max-w-3xl text-center">
             <blockquote>
               <p className="font-serif text-2xl font-normal leading-relaxed text-foreground sm:text-[1.75rem]">
@@ -334,7 +332,7 @@ export default function HomePage() {
         </section>
 
         {/* CTA Section */}
-        <section className="border-t border-border bg-card px-6 py-24 lg:px-8 lg:py-32">
+        <section className="border-t border-border bg-card px-12 sm:px-16 py-24 lg:px-20 lg:py-32">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="font-serif text-[2rem] font-normal leading-tight tracking-tight sm:text-[2.5rem]">
               Your match is out there.

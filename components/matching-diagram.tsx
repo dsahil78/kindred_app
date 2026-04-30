@@ -11,7 +11,7 @@ export function MatchingDiagram() {
   }, [])
 
   return (
-    <div className="relative mx-auto aspect-[600/500] w-full min-w-[320px] max-w-[560px]">
+    <div className="relative mx-auto aspect-[600/500] w-full min-w-[320px] max-w-[480px]">
       <svg
         className="absolute inset-0 h-full w-full"
         viewBox="0 0 600 500"
@@ -23,9 +23,9 @@ export function MatchingDiagram() {
         {/* Dashed line: user → top therapist (edge to edge) */}
         <line
           x1="207"
-          y1="216"
-          x2="402"
-          y2="99"
+          y1="217"
+          x2="404"
+          y2="101"
           stroke="currentColor"
           strokeWidth="2"
           strokeDasharray="2 9"
@@ -40,9 +40,9 @@ export function MatchingDiagram() {
         {/* Dashed line: user → bottom therapist */}
         <line
           x1="207"
-          y1="284"
-          x2="402"
-          y2="401"
+          y1="283"
+          x2="404"
+          y2="399"
           stroke="currentColor"
           strokeWidth="2"
           strokeDasharray="2 9"
@@ -89,7 +89,7 @@ export function MatchingDiagram() {
         className="absolute aspect-square w-[14%]"
         style={{
           left: "73.3%",
-          top: "15%",
+          top: "16%",
           transform: `translate(-50%, -50%) ${mounted ? "translateY(0)" : "translateY(10px)"}`,
           opacity: mounted ? 1 : 0,
           transition: "all 0.5s ease-out 0.4s",
@@ -135,9 +135,10 @@ export function MatchingDiagram() {
             </svg>
           </div>
 
-          {/* Best match pill */}
-          <div className="absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-primary/15 px-3 py-1 text-xs font-medium text-primary sm:mt-3 sm:px-4 sm:py-1.5 sm:text-sm">
-            Best match
+          {/* Best match pill — right side of circle, two-line stacked */}
+          <div className="absolute left-full top-1/2 ml-2 -translate-y-1/2 rounded-2xl bg-primary/15 px-2.5 py-1.5 text-center text-[0.6rem] font-semibold uppercase leading-tight tracking-[0.08em] text-primary sm:ml-3 sm:px-3 sm:py-2 sm:text-[0.7rem]">
+            <span className="block">Best</span>
+            <span className="block">match</span>
           </div>
         </div>
       </div>
@@ -147,7 +148,7 @@ export function MatchingDiagram() {
         className="absolute aspect-square w-[14%]"
         style={{
           left: "73.3%",
-          top: "85%",
+          top: "84%",
           transform: `translate(-50%, -50%) ${mounted ? "translateY(0)" : "translateY(-10px)"}`,
           opacity: mounted ? 1 : 0,
           transition: "all 0.5s ease-out 0.5s",

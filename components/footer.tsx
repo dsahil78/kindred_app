@@ -4,7 +4,7 @@ import { FindMatchLink } from "@/components/find-match-link"
 export function Footer() {
   return (
     <footer className="border-t border-border bg-card">
-      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
+      <div className="mx-auto max-w-6xl px-12 sm:px-16 py-16 lg:px-20">
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">
             <Link href="/" className="inline-block">
