@@ -1,15 +1,33 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
+import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { TherapistCard } from "@/components/therapist-card"
 import { generateMatchResults } from "@/lib/mock-data"
 import type { MatchResult } from "@/lib/types"
-import { ArrowLeft, RefreshCw, HelpCircle } from "lucide-react"
+import { ArrowLeft, RefreshCw, LayoutDashboard, HelpCircle } from "lucide-react"
 import { CheckmarkIcon, BrainIcon } from "@/components/icons"
 
 export default function MatchesPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
+      <MatchesPageInner />
+    </Suspense>
+  )
+}
+
+function MatchesPageInner() {
+  const searchParams = useSearchParams()
+  const from = searchParams.get("from")
+  const mode = searchParams.get("mode")
+  const editHref =
+    from === "onboarding"
+      ? mode
+        ? `/client/onboarding?mode=${mode}`
+        : "/client/onboarding"
+      : "/intake"
   const [matches, setMatches] = useState<MatchResult[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -59,7 +77,7 @@ export default function MatchesPage() {
       {/* Header */}
       <header className="w-full bg-background">
         <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-6">
-          <Link href="/intake" className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground">
+          <Link href={editHref} className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground">
             <ArrowLeft className="h-4 w-4" />
             <span className="text-sm">Edit responses</span>
           </Link>
@@ -68,9 +86,11 @@ export default function MatchesPage() {
             <span className="font-serif text-2xl font-normal tracking-tight text-foreground">Kindred</span>
           </Link>
 
-          <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground">
-            <HelpCircle className="h-4 w-4" />
-            <span className="hidden sm:inline">Help</span>
+          <Button variant="ghost" size="sm" asChild className="gap-2 text-muted-foreground">
+            <Link href="/client/dashboard">
+              <LayoutDashboard className="h-4 w-4" />
+              <span className="hidden sm:inline">Dashboard</span>
+            </Link>
           </Button>
         </div>
       </header>
@@ -137,7 +157,12 @@ export default function MatchesPage() {
         {/* Match Cards */}
         <div className="space-y-8">
           {matches.map((match, index) => (
-            <TherapistCard key={match.therapist.id} match={match} rank={index + 1} />
+            <TherapistCard
+              key={match.therapist.id}
+              match={match}
+              rank={index + 1}
+              offersFreeConsultation={index === 2}
+            />
           ))}
         </div>
 
@@ -150,7 +175,7 @@ export default function MatchesPage() {
           </p>
           <div className="flex flex-col gap-3 sm:flex-row">
             <Button variant="outline" className="gap-2 rounded-full" asChild>
-              <Link href="/intake">
+              <Link href={editHref}>
                 <RefreshCw className="h-4 w-4" />
                 Refine My Responses
               </Link>

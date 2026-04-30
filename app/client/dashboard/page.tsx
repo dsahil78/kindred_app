@@ -6,7 +6,8 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { mockTherapists, mockSessions } from "@/lib/mock-data"
-import { Calendar, Clock, Video, MessageSquare, ArrowRight, Plus, User } from "lucide-react"
+import { Calendar, Clock, Video, MessageSquare, ArrowRight, Plus } from "lucide-react"
+import { UserMenu } from "@/components/user-menu"
 
 function DashboardContent() {
   const router = useRouter()
@@ -42,15 +43,13 @@ function DashboardContent() {
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
           <Link href="/" className="font-serif text-xl text-foreground">Kindred</Link>
           <nav className="flex items-center gap-6">
-            <Link href="/client/matches" className="text-sm text-muted-foreground hover:text-foreground">
+            <Link href="/matches" className="text-sm text-muted-foreground hover:text-foreground">
               Find Therapists
             </Link>
             <Link href="/client/messages" className="text-sm text-muted-foreground hover:text-foreground">
               Messages
             </Link>
-            <button className="flex h-8 w-8 items-center justify-center rounded-full bg-muted">
-              <User className="h-4 w-4 text-foreground" />
-            </button>
+            <UserMenu settingsHref="/client/settings" />
           </nav>
         </div>
       </header>
@@ -247,7 +246,7 @@ function DashboardContent() {
                   <ArrowRight className="h-4 w-4 text-muted-foreground" />
                 </button>
                 <button
-                  onClick={() => router.push("/client/matches")}
+                  onClick={() => router.push("/matches")}
                   className="flex w-full items-center justify-between rounded-xl p-3 text-left transition-colors hover:bg-muted"
                 >
                   <span className="text-sm text-foreground">Find a new therapist</span>

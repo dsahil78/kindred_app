@@ -6,16 +6,17 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Play, Pause, Calendar, Clock, Video, ArrowRight } from "lucide-react"
+import { Play, Pause, Calendar, Clock, MapPin, Video, ArrowRight } from "lucide-react"
 import { CheckmarkIcon, SoundWaveIcon } from "@/components/icons"
 import type { MatchResult } from "@/lib/types"
 
 interface TherapistCardProps {
   match: MatchResult
   rank: number
+  offersFreeConsultation?: boolean
 }
 
-export function TherapistCard({ match, rank }: TherapistCardProps) {
+export function TherapistCard({ match, rank, offersFreeConsultation = false }: TherapistCardProps) {
   const { therapist, fitExplanation, keyStrengths } = match
   const [isPlaying, setIsPlaying] = useState(false)
   const [progress, setProgress] = useState(0)
@@ -58,16 +59,16 @@ export function TherapistCard({ match, rank }: TherapistCardProps) {
   }
 
   return (
-    <Card className="overflow-hidden border border-border">
+    <Card className="overflow-hidden border border-border py-0">
       <CardContent className="p-0">
         <div className="flex flex-col lg:flex-row">
           {/* Left Column - Photo and Basic Info */}
-          <div className="bg-muted/30 p-8 lg:w-80 lg:shrink-0">
+          <div className="bg-muted/30 p-6 lg:w-80 lg:shrink-0">
             <div className="flex flex-col items-center text-center">
               {/* Match Badge */}
-              <Badge 
-                variant="default" 
-                className="mb-6 rounded-full bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground"
+              <Badge
+                variant="default"
+                className="mb-4 rounded-full bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground"
               >
                 #{rank} Match · {therapist.matchScore}% fit
               </Badge>
@@ -86,15 +87,21 @@ export function TherapistCard({ match, rank }: TherapistCardProps) {
               </div>
               
               {/* Name and Credentials */}
-              <div className="mt-5">
+              <div className="mt-4">
                 <h3 className="font-serif text-xl font-normal">{therapist.name}</h3>
-                <p className="mt-1.5 text-sm text-muted-foreground">{therapist.credentials}</p>
-                <p className="mt-1 text-sm text-muted-foreground">{therapist.yearsExperience} years experience</p>
+                <p className="mt-1 text-sm text-muted-foreground">{therapist.credentials}</p>
+                <p className="text-sm text-muted-foreground">{therapist.yearsExperience} years experience</p>
+                {therapist.location && (
+                  <p className="mt-1.5 inline-flex items-center gap-1.5 text-sm text-muted-foreground">
+                    <MapPin className="h-3.5 w-3.5" />
+                    {therapist.location}
+                  </p>
+                )}
               </div>
             </div>
 
             {/* Voice Intro Player */}
-            <div className="mt-8 rounded-xl bg-background p-5">
+            <div className="mt-5 rounded-xl bg-background p-4">
               <div className="flex items-center gap-4">
                 <button
                   onClick={togglePlay}
@@ -130,7 +137,7 @@ export function TherapistCard({ match, rank }: TherapistCardProps) {
             </div>
 
             {/* Quick Info */}
-            <div className="mt-6 space-y-2.5 text-sm">
+            <div className="mt-5 space-y-2 text-sm">
               <div className="flex items-center gap-3 text-muted-foreground">
                 <Clock className="h-4 w-4" />
                 {therapist.availability}
@@ -147,24 +154,24 @@ export function TherapistCard({ match, rank }: TherapistCardProps) {
           </div>
 
           {/* Right Column - Match Details */}
-          <div className="flex-1 p-8 lg:p-10">
+          <div className="flex-1 p-6 lg:p-8">
             {/* Short Bio */}
             <p className="font-serif text-xl font-normal italic leading-relaxed text-muted-foreground">
               &ldquo;{therapist.shortBio}&rdquo;
             </p>
 
             {/* Why This Match */}
-            <div className="mt-10">
+            <div className="mt-6">
               <h4 className="text-sm font-medium uppercase tracking-[0.15em] text-secondary">Why Kindred matched you</h4>
-              <p className="mt-4 leading-relaxed text-muted-foreground">
+              <p className="mt-3 leading-relaxed text-muted-foreground">
                 {fitExplanation}
               </p>
             </div>
 
             {/* Key Strengths */}
-            <div className="mt-10">
+            <div className="mt-6">
               <h4 className="font-medium text-foreground">Key strengths for your needs</h4>
-              <ul className="mt-5 space-y-3.5">
+              <ul className="mt-3 space-y-2.5">
                 {keyStrengths.map((strength, index) => (
                   <li key={index} className="flex items-start gap-3 text-muted-foreground">
                     <CheckmarkIcon className="mt-0.5 h-5 w-5 shrink-0 text-secondary" />
@@ -175,9 +182,9 @@ export function TherapistCard({ match, rank }: TherapistCardProps) {
             </div>
 
             {/* Specialties */}
-            <div className="mt-10">
+            <div className="mt-6">
               <h4 className="text-sm font-medium text-muted-foreground">Specialties</h4>
-              <div className="mt-4 flex flex-wrap gap-2">
+              <div className="mt-3 flex flex-wrap gap-2">
                 {therapist.specialties.map((specialty) => (
                   <Badge key={specialty} variant="secondary" className="rounded-full bg-muted px-3.5 py-1 text-muted-foreground">
                     {specialty}
@@ -186,18 +193,50 @@ export function TherapistCard({ match, rank }: TherapistCardProps) {
               </div>
             </div>
 
+            {/* Free intro highlight */}
+            {offersFreeConsultation && (
+              <div className="mt-6 flex items-start gap-3 rounded-xl border border-secondary/30 bg-secondary/10 p-3 text-sm leading-relaxed text-foreground">
+                <CheckmarkIcon className="mt-0.5 h-5 w-5 shrink-0 text-secondary" />
+                <span>
+                  <span className="font-medium">Offering a free 15-min intro session</span> — see if
+                  the fit feels right before committing.
+                </span>
+              </div>
+            )}
+
             {/* Actions */}
-            <div className="mt-12 flex flex-col gap-3 sm:flex-row">
-              <Button asChild className="flex-1 gap-2 rounded-full">
-                <Link href={`/therapist/${therapist.id}`}>
-                  View Full Profile
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-              </Button>
-              <Button variant="outline" className="flex-1 gap-2 rounded-full">
-                <Calendar className="h-4 w-4" />
-                Request Consultation
-              </Button>
+            <div className={`flex flex-col gap-3 sm:flex-row ${offersFreeConsultation ? "mt-4" : "mt-7"}`}>
+              {offersFreeConsultation ? (
+                <>
+                  <Button asChild className="flex-1 gap-2 rounded-full">
+                    <Link href={`/client/book/${therapist.id}?type=consultation`}>
+                      <Calendar className="h-4 w-4" />
+                      Book a 15-min Free Session
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" className="flex-1 gap-2 rounded-full">
+                    <Link href={`/therapist/${therapist.id}`}>
+                      View Full Profile
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button asChild className="flex-1 gap-2 rounded-full">
+                    <Link href={`/therapist/${therapist.id}`}>
+                      View Full Profile
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" className="flex-1 gap-2 rounded-full">
+                    <Link href={`/client/book/${therapist.id}?type=session`}>
+                      <Calendar className="h-4 w-4" />
+                      Book a Session
+                    </Link>
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>

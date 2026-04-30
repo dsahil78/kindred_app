@@ -18,6 +18,7 @@ export const mockTherapists: Therapist[] = [
     yearsExperience: 8,
     bio: "I specialize in helping high-achieving professionals navigate anxiety, burnout, and the unique pressures of demanding careers. My approach combines evidence-based cognitive techniques with mindfulness practices, creating a space where you can both develop practical coping strategies and explore the deeper patterns driving your stress. I understand the tech industry culture firsthand, having worked with hundreds of engineers, PMs, and executives over my 8 years of practice. My goal is to help you not just manage symptoms, but truly understand yourself and build a life that feels sustainable and meaningful.",
     shortBio: "Helping high-achievers find balance without sacrificing ambition.",
+    location: "Capitol Hill, Seattle, WA",
     matchScore: 94,
     matchReasons: [
       "Extensive experience with tech professionals",
@@ -47,6 +48,7 @@ export const mockTherapists: Therapist[] = [
     yearsExperience: 12,
     bio: "I believe that healing happens in relationship. My practice centers on creating a safe, non-judgmental space where you can explore not just what you think, but what you feel in your body. I specialize in helping people understand how past experiences shape present patterns, particularly in relationships and work. Using somatic therapy techniques, we will work together to release stored tension and build a deeper connection with yourself. I work at a pace that feels right for you, and I am particularly drawn to helping people who feel like they have been going through the motions without really feeling alive.",
     shortBio: "Creating safety to explore what lies beneath the surface.",
+    location: "Ballard, Seattle, WA",
     matchScore: 89,
     matchReasons: [
       "Specializes in the work-life disconnect you mentioned",
@@ -75,6 +77,7 @@ export const mockTherapists: Therapist[] = [
     yearsExperience: 6,
     bio: "I help people who are successful on paper but feel lost inside. Using Acceptance and Commitment Therapy, we will work together to clarify what truly matters to you and build a life aligned with those values, even when it is hard. I am particularly passionate about helping first-generation professionals and people navigating multiple cultural identities. Therapy with me is collaborative: I will share tools and perspectives, but you are the expert on your own life. My job is to help you hear your own wisdom more clearly.",
     shortBio: "Helping you build a life that matches your values.",
+    location: "U District, Seattle, WA",
     matchScore: 86,
     matchReasons: [
       "ACT approach great for the uncertainty you described",

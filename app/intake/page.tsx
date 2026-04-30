@@ -76,7 +76,7 @@ export default function IntakePage() {
     setIsSubmitting(true)
     sessionStorage.setItem("kindred-intake", JSON.stringify(responses))
     await new Promise(resolve => setTimeout(resolve, 2000))
-    router.push("/matches")
+    router.push("/matches?from=intake")
   }
 
   return (

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -10,18 +10,20 @@ import { Label } from "@/components/ui/label"
 import { Progress } from "@/components/ui/progress"
 import { Switch } from "@/components/ui/switch"
 import { useAuth } from "@/lib/auth-context"
-import { 
-  therapistSpecialties, 
-  therapistApproaches, 
+import {
+  therapistSpecialties,
+  therapistApproaches,
   communicationStyles,
   insuranceProviders,
-  referralSources 
+  referralSources
 } from "@/lib/types"
-import { ArrowRight, ArrowLeft, Check, Upload } from "lucide-react"
+import { ArrowRight, ArrowLeft, Check, Mic, Pause, Play, RotateCcw, Square, Upload } from "lucide-react"
 
-type Step = "personal" | "credentials" | "practice" | "availability" | "consultation" | "referral"
+type Step = "personal" | "credentials" | "practice" | "voice" | "availability" | "consultation" | "referral"
 
-const steps: Step[] = ["personal", "credentials", "practice", "availability", "consultation", "referral"]
+const steps: Step[] = ["personal", "credentials", "practice", "voice", "availability", "consultation", "referral"]
+
+type VoiceState = "idle" | "recording" | "ready"
 
 export default function TherapistOnboardingPage() {
   const router = useRouter()
@@ -68,6 +70,50 @@ export default function TherapistOnboardingPage() {
     "Aetna",
   ])
 
+  // Voice intro (mock recording — no real audio capture for the demo)
+  const [voiceState, setVoiceState] = useState<VoiceState>("ready")
+  const [voiceDuration, setVoiceDuration] = useState(34)
+  const [isPlayingPreview, setIsPlayingPreview] = useState(false)
+  const recordingTimer = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (recordingTimer.current) clearInterval(recordingTimer.current)
+    }
+  }, [])
+
+  const startRecording = () => {
+    setVoiceState("recording")
+    setVoiceDuration(0)
+    recordingTimer.current = setInterval(() => {
+      setVoiceDuration((d) => {
+        if (d >= 90) {
+          stopRecording()
+          return 90
+        }
+        return d + 1
+      })
+    }, 1000)
+  }
+
+  const stopRecording = () => {
+    if (recordingTimer.current) {
+      clearInterval(recordingTimer.current)
+      recordingTimer.current = null
+    }
+    setVoiceState("ready")
+  }
+
+  const resetRecording = () => {
+    if (recordingTimer.current) {
+      clearInterval(recordingTimer.current)
+      recordingTimer.current = null
+    }
+    setIsPlayingPreview(false)
+    setVoiceDuration(0)
+    setVoiceState("idle")
+  }
+
   // Free Consultation
   const [offersFreeConsultation, setOffersFreeConsultation] = useState(true)
   const [consultationDuration, setConsultationDuration] = useState("15")
@@ -77,6 +123,12 @@ export default function TherapistOnboardingPage() {
   const [referralCode, setReferralCode] = useState("")
 
   const progress = ((currentStep + 1) / steps.length) * 100
+
+  const formatTime = (seconds: number) => {
+    const m = Math.floor(seconds / 60)
+    const s = seconds % 60
+    return `${m}:${s.toString().padStart(2, "0")}`
+  }
 
   const handleSpecialtyToggle = (specialty: string) => {
     if (selectedSpecialties.includes(specialty)) {
@@ -137,6 +189,8 @@ export default function TherapistOnboardingPage() {
       offersFreeConsultation,
       freeConsultationDuration: offersFreeConsultation ? parseInt(consultationDuration) : undefined,
       referralSource: referralSource || undefined,
+      voiceIntroUrl: voiceState === "ready" && voiceDuration > 0 ? "/audio/demo-intro.mp3" : undefined,
+      voiceIntroDuration: voiceState === "ready" && voiceDuration > 0 ? voiceDuration : undefined,
       onboardingComplete: true
     })
     router.push("/therapist/dashboard")
@@ -150,6 +204,8 @@ export default function TherapistOnboardingPage() {
         return credentials && licenseNumber && licenseState && yearsExperience
       case "practice":
         return selectedSpecialties.length > 0 && selectedApproach && selectedStyle && bio && shortBio
+      case "voice":
+        return true
       case "availability":
         return sessionFormats.length > 0 && sessionRate
       case "consultation":
@@ -165,6 +221,7 @@ export default function TherapistOnboardingPage() {
     personal: "Personal Information",
     credentials: "Professional Credentials",
     practice: "Your Practice",
+    voice: "Voice Intro",
     availability: "Availability & Rates",
     consultation: "Free Consultation",
     referral: "How did you hear about us?"
@@ -406,6 +463,119 @@ export default function TherapistOnboardingPage() {
                   className="h-12 rounded-xl"
                 />
               </div>
+            </div>
+          )}
+
+          {/* Voice Intro Step */}
+          {steps[currentStep] === "voice" && (
+            <div className="mt-8 space-y-8">
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                A 30–60 second clip clients hear before booking. Voice tells them more about
+                fit than any photo or bio can. Tip: introduce yourself, then share what drew
+                you to this work.
+              </p>
+
+              <div className="rounded-3xl border border-border bg-card p-8 lg:p-10">
+                <div className="flex flex-col items-center text-center">
+                  {voiceState === "idle" && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={startRecording}
+                        className="group flex h-24 w-24 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md transition-all hover:scale-105 hover:shadow-lg"
+                        aria-label="Start recording"
+                      >
+                        <Mic className="h-9 w-9 transition-transform group-hover:scale-110" />
+                      </button>
+                      <p className="mt-5 text-sm font-medium text-foreground">
+                        Tap to record
+                      </p>
+                      <p className="mt-1 text-xs text-muted-foreground">Up to 90 seconds</p>
+                    </>
+                  )}
+
+                  {voiceState === "recording" && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={stopRecording}
+                        className="relative flex h-24 w-24 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md"
+                        aria-label="Stop recording"
+                      >
+                        <span className="absolute inset-0 animate-ping rounded-full bg-primary/40" />
+                        <Square className="relative h-8 w-8 fill-current" />
+                      </button>
+                      <p className="mt-5 flex items-center gap-2 font-mono text-2xl font-medium tabular-nums text-foreground">
+                        <span className="h-2 w-2 animate-pulse rounded-full bg-primary" />
+                        {formatTime(voiceDuration)}
+                      </p>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        Recording — tap to stop
+                      </p>
+                    </>
+                  )}
+
+                  {voiceState === "ready" && (
+                    <div className="w-full max-w-sm">
+                      <div className="flex items-center gap-4 rounded-2xl bg-background p-4 ring-1 ring-border">
+                        <button
+                          type="button"
+                          onClick={() => setIsPlayingPreview((p) => !p)}
+                          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground transition-colors hover:bg-primary/90"
+                          aria-label={isPlayingPreview ? "Pause preview" : "Play preview"}
+                        >
+                          {isPlayingPreview ? (
+                            <Pause className="h-5 w-5 fill-current" />
+                          ) : (
+                            <Play className="ml-0.5 h-5 w-5 fill-current" />
+                          )}
+                        </button>
+                        <div className="flex flex-1 flex-col items-start">
+                          <span className="text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground">
+                            Voice intro
+                          </span>
+                          <div className="mt-1.5 flex w-full items-center gap-1">
+                            {Array.from({ length: 28 }).map((_, i) => (
+                              <span
+                                key={i}
+                                className="flex-1 rounded-full bg-primary/30"
+                                style={{
+                                  height: `${6 + ((i * 7) % 13)}px`,
+                                  opacity: isPlayingPreview ? (i < 12 ? 0.9 : 0.4) : 0.5,
+                                }}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                        <span className="font-mono text-sm tabular-nums text-muted-foreground">
+                          {formatTime(voiceDuration)}
+                        </span>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={resetRecording}
+                        className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        <RotateCcw className="h-3.5 w-3.5" />
+                        Re-record
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="rounded-2xl bg-secondary/10 p-4 text-sm leading-relaxed text-secondary">
+                <span className="font-medium text-foreground">A few prompts to draw from:</span>{" "}
+                What kind of clients do you work best with? What does a first session usually
+                feel like? What pulled you into this work?
+              </div>
+
+              {voiceState === "idle" && (
+                <p className="text-center text-xs text-muted-foreground">
+                  You can skip and add this later from your dashboard.
+                </p>
+              )}
             </div>
           )}
 

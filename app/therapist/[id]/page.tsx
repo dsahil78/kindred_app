@@ -200,9 +200,11 @@ export default function TherapistProfilePage({
 
                 {/* Actions */}
                 <div className="mt-8 space-y-3">
-                  <Button className="w-full gap-2 rounded-full">
-                    <Calendar className="h-4 w-4" />
-                    Request Free Consultation
+                  <Button asChild className="w-full gap-2 rounded-full">
+                    <Link href={`/client/book/${therapist.id}?type=session`}>
+                      <Calendar className="h-4 w-4" />
+                      Book a Session
+                    </Link>
                   </Button>
                   <Button variant="outline" className="w-full gap-2 rounded-full">
                     <MessageSquare className="h-4 w-4" />
@@ -320,11 +322,13 @@ export default function TherapistProfilePage({
             <div className="flex flex-col items-center gap-5 rounded-2xl border border-border bg-card p-10 text-center">
               <h3 className="font-serif text-xl font-normal">Ready to connect?</h3>
               <p className="leading-relaxed text-muted-foreground">
-                Book a free 15-minute consultation to see if {therapist.name.split(" ")[0]} is the right fit.
+                Book a session with {therapist.name.split(" ")[0]} and walk in already knowing it could be the one.
               </p>
-              <Button size="lg" className="gap-2 rounded-full px-8">
-                Request Consultation
-                <ArrowRight className="h-4 w-4" />
+              <Button asChild size="lg" className="gap-2 rounded-full px-8">
+                <Link href={`/client/book/${therapist.id}?type=session`}>
+                  Book a Session
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
               </Button>
             </div>
           </div>

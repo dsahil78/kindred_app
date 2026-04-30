@@ -12,13 +12,13 @@ import {
   Video, 
   Users, 
   TrendingUp, 
-  Bell, 
-  Settings, 
+  Bell,
   ChevronRight,
   Phone,
   FileText,
   Plus
 } from "lucide-react"
+import { UserMenu } from "@/components/user-menu"
 
 export default function TherapistDashboardPage() {
   const router = useRouter()
@@ -63,15 +63,13 @@ export default function TherapistDashboardPage() {
             <Link href="/therapist/clients" className="text-sm text-muted-foreground hover:text-foreground">
               Clients
             </Link>
-            <button className="relative">
+            <button className="relative" aria-label="Notifications">
               <Bell className="h-5 w-5 text-muted-foreground" />
               <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
                 3
               </span>
             </button>
-            <button className="flex h-8 w-8 items-center justify-center rounded-full bg-muted">
-              <Settings className="h-4 w-4 text-foreground" />
-            </button>
+            <UserMenu settingsHref="/therapist/settings" />
           </nav>
         </div>
       </header>

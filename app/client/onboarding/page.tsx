@@ -1,7 +1,7 @@
 "use client"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { Suspense, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
@@ -12,11 +12,26 @@ import { MessageSquare, Mic, Type, ArrowRight, ArrowLeft, Check } from "lucide-r
 
 type OnboardingMode = "choices" | "voice" | "text"
 
+const VALID_MODES: OnboardingMode[] = ["choices", "voice", "text"]
+
 export default function ClientOnboardingPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
+      <ClientOnboardingPageInner />
+    </Suspense>
+  )
+}
+
+function ClientOnboardingPageInner() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const initialMode = (() => {
+    const m = searchParams.get("mode")
+    return m && (VALID_MODES as string[]).includes(m) ? (m as OnboardingMode) : null
+  })()
   const { updateClientProfile } = useAuth()
-  const [step, setStep] = useState(0) // 0 = mode selection, 1-6 = questions, 7 = insurance
-  const [mode, setMode] = useState<OnboardingMode | null>(null)
+  const [step, setStep] = useState(initialMode ? 1 : 0)
+  const [mode, setMode] = useState<OnboardingMode | null>(initialMode)
   const [answers, setAnswers] = useState<Record<number, string[]>>({})
   const [textAnswers, setTextAnswers] = useState<Record<number, string>>({})
   const [voiceTranscript, setVoiceTranscript] = useState("")
@@ -95,7 +110,7 @@ export default function ClientOnboardingPage() {
         memberId: insuranceId
       } : undefined
     })
-    router.push("/client/matches")
+    router.push(`/matches?from=onboarding${mode ? `&mode=${mode}` : ""}`)
   }
 
   const canProceed = () => {

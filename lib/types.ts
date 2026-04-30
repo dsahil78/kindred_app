@@ -172,6 +172,7 @@ export interface Therapist {
   yearsExperience: number
   bio: string
   shortBio: string
+  location?: string
   matchScore: number
   matchReasons: string[]
   availability: string
